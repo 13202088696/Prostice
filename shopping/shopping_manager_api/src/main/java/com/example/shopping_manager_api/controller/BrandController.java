@@ -1,6 +1,7 @@
 package com.example.shopping_manager_api.controller;
 
 import com.itbaizhan.shopping_common.pojo.Brand;
+import com.itbaizhan.shopping_common.result.BaseResult;
 import com.itbaizhan.shopping_common.service.BrandService;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +15,8 @@ public class BrandController {
     private BrandService brandService;
 
     @GetMapping("/findBrandById")
-    public Brand findBrandById(Long id){
+    public BaseResult<Brand> findBrandById(Long id){
         Brand brand = brandService.findById(id);
-        return brand;
+        return BaseResult.ok(brand);
     }
 }
