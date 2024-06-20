@@ -11,9 +11,11 @@
 
     <!--子模块-->
     <modules>
-        <!--通用模块-->
+        <!--  通用模块  -->
         <module>shopping_common</module>
         <module>shopping_goods_service</module>
+        <!--  通用商业api模块   -->
+        <module>shopping_manager_api</module>
     </modules>
 
     <properties>
