@@ -11,8 +11,10 @@ import lombok.Getter;
 public enum CodeEnum {
     //正常
     SUCCESS(200,"OK"),
-    //异常
-    ERROR(500,"系统异常")
+    //系统异常
+    SYSTEM_ERROR(500,"系统异常"),
+    //业务异常
+    PARAMETER_ERROR(601,"参数异常"),
     ;
     private final Integer code;
     private final String message;

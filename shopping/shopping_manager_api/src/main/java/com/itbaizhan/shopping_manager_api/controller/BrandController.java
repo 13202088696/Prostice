@@ -1,4 +1,4 @@
-package com.example.shopping_manager_api.controller;
+package com.itbaizhan.shopping_manager_api.controller;
 
 import com.itbaizhan.shopping_common.pojo.Brand;
 import com.itbaizhan.shopping_common.result.BaseResult;

@@ -1,4 +1,4 @@
-package com.example.shopping_manager_api;
+package com.itbaizhan.shopping_manager_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
