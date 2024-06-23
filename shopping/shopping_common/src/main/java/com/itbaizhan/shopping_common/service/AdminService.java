@@ -1,7 +1,8 @@
 package com.itbaizhan.shopping_common.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itbaizhan.shopping_common.pojo.Admin;
-import org.springframework.data.domain.Page;
+
 
 //管理服务
 public interface AdminService {
