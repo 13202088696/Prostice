@@ -6,6 +6,7 @@ import com.itbaizhan.shopping_common.result.BaseResult;
 import com.itbaizhan.shopping_common.service.RoleService;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,6 +47,7 @@ public class RoleController {
     }
 
     @GetMapping("/search")
+    //@PreAuthorize("hasAnyAuthority('/role/search')")
     public BaseResult<Page<Role>> search(int page,int size){
         Page<Role> rolePage = roleService.search(page, size);
         return BaseResult.ok(rolePage);

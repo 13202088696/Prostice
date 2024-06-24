@@ -4,7 +4,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itbaizhan.shopping_common.pojo.Admin;
 import com.itbaizhan.shopping_common.result.BaseResult;
 import com.itbaizhan.shopping_common.service.AdminService;
+import com.itbaizhan.shopping_manager_api.security.SecurityConfig;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,6 +22,9 @@ public class AdminController {
     @DubboReference
     private AdminService adminService;
 
+    @Autowired
+    private PasswordEncoder encoder;
+
     /**
      * 新增管理员
      * @param admin 管理员对象
@@ -20,6 +32,9 @@ public class AdminController {
      */
     @PostMapping("/add")
     public BaseResult add(@RequestBody Admin admin){
+        String password = admin.getPassword();
+        password = encoder.encode(password);
+        admin.setPassword(password);
         adminService.add(admin);
         return BaseResult.ok();
     }
@@ -31,6 +46,11 @@ public class AdminController {
      */
     @PutMapping("/update")
     public BaseResult update(@RequestBody Admin admin){
+        String password = admin.getPassword();
+        if(StringUtils.hasText(password)){
+            password = encoder.encode(password);
+            admin.setPassword(password);
+        }
         adminService.update(admin);
         return BaseResult.ok();
     }
@@ -64,6 +84,7 @@ public class AdminController {
      * @return 结果
      */
     @GetMapping("/search")
+    //@PreAuthorize("hasAnyAuthority('/admin/search')")
     public BaseResult<Page<Admin>> search(int page,int size){
         Page<Admin> adminPage = adminService.search(page, size);
         return BaseResult.ok(adminPage);
@@ -79,5 +100,17 @@ public class AdminController {
     public BaseResult updateRoleToAdmin(Long aid,Long[] rids){
         adminService.updateRoleToAdmin(aid,rids);
         return BaseResult.ok();
+    }
+
+    @GetMapping("/getUserName")
+    public BaseResult<String> gstUserName(){
+        //获得会话对象
+        SecurityContext context = SecurityContextHolder.getContext();
+        //获得认证对象信息
+        Authentication authentication = context.getAuthentication();
+        //获得登录用户信息
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        return BaseResult.ok(username);
     }
 }
