@@ -9,4 +9,8 @@ public interface GoodsMapper extends BaseMapper<Goods> {
     void addGoodsSpecificationOption(@Param("gid") Long gid, @Param("optionId")Long optionId);
     //删除是商品下所有规格
     void deleteGoodsSpecificationOption(Long gid);
+    //商品上下架
+    void putAway(@Param("id") Long id,@Param("isMarketable") Boolean isMarketable);
+    //根据id查询goods
+    Goods findById(Long id);
 }

@@ -10,7 +10,7 @@ public interface GoodsService {
     //修改商品
     void update(Goods goods);
     //根据id查询商品
-    void findById(Long id);
+    Goods findById(Long id);
     //上架、下架商品
     void putAway(Long id,Boolean isMarketable);
     //分页查询

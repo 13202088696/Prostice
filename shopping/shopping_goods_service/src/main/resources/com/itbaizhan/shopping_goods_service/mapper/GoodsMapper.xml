@@ -12,4 +12,71 @@
         DELETE FROM bz_goods_specification_option WHERE gid = #{gid}
     </delete>
 
+    <update id="putAway">
+        UPDATE bz_goods SET isMarketable = #{isMarketable} WHERE id = #{id}
+    </update>
+
+
+    <resultMap id="goodsMapper" type="com.itbaizhan.shopping_common.pojo.Goods">
+        <id property="id" column="bid"></id>
+        <result property="goodsName" column="goodsName"></result>
+        <result property="caption" column="caption"></result>
+        <result property="price" column="price"></result>
+        <result property="headerPic" column="headerPic"></result>
+        <result property="isMarketable" column="isMarketable"></result>
+        <result property="brandId" column="brandId"></result>
+        <result property="productType1Id" column="productType1Id"></result>
+        <result property="productType2Id" column="productType2Id"></result>
+        <result property="productType3Id" column="productType3Id"></result>
+        <result property="introduction" column="introduction"></result>
+        <collection property="images" column="bid" ofType="com.itbaizhan.shopping_common.pojo.GoodsImage">
+            <id property="id" column="imageId"></id>
+            <result property="imageTitle" column="imageTitle"></result>
+            <result property="imageUrl" column="imageUrl"></result>
+        </collection>
+        <collection property="specifications" column="bid" ofType="com.itbaizhan.shopping_common.pojo.Specification">
+            <id property="id" column="specificationId"></id>
+            <result property="specName" column="specName"></result>
+            <result property="productTypeId" column="productTypeId"></result>
+            <collection property="specificationOptions" column="specificationId" ofType="com.itbaizhan.shopping_common.pojo.SpecificationOption">
+                <id property="id" column="optionId"></id>
+                <result property="optionName" column="optionName"></result>
+            </collection>
+        </collection>
+    </resultMap>
+
+
+    <select id="findById" parameterType="long" resultMap="goodsMapper">
+        SELECT
+            bz_goods.id AS bid,
+            bz_goods.goodsName AS goodsName,
+            bz_goods.caption AS caption,
+            bz_goods.price AS price,
+            bz_goods.headerPic AS headerPic,
+            bz_goods.introduction AS introduction,
+            bz_goods.isMarketable AS isMarketable,
+            bz_goods.brandId AS brandId,
+            bz_goods.productType1Id AS productType1Id,
+            bz_goods.productType2Id AS productType2Id,
+            bz_goods.productType3Id AS productType3Id,
+            bz_goods_image.id AS imageId,
+            bz_goods_image.imageTitle AS imageTitle,
+            bz_goods_image.imageUrl AS imageUrl,
+            bz_specification.id AS specificationId,
+            bz_specification.specName AS specName,
+            bz_specification.productTypeId AS productTypeId,
+            bz_specification_option.id AS optionId,
+            bz_specification_option.optionName AS optionName
+        FROM
+            bz_goods,
+            bz_goods_specification_option,
+            bz_specification_option,
+            bz_specification,
+            bz_goods_image
+        WHERE bz_goods.id = bz_goods_specification_option.gid
+          AND bz_goods_specification_option.optionId = bz_specification_option.id
+          AND bz_specification.id = bz_specification_option.specId
+          AND bz_goods.id = bz_goods_image.goodsId
+          AND bz_goods.id = #{gid}
+    </select>
 </mapper>
