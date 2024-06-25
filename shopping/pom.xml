@@ -18,6 +18,8 @@
         <module>shopping_manager_api</module>
         <!--  admin模块   -->
         <module>shopping_admin_service</module>
+        <!-- file模块 -->
+        <module>shopping_file_service</module>
     </modules>
 
     <properties>

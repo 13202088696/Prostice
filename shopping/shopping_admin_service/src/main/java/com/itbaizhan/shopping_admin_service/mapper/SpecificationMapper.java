@@ -5,9 +5,9 @@ import com.itbaizhan.shopping_common.pojo.Specification;
 
 import java.util.List;
 
-public interface specificationMapper extends BaseMapper<Specification> {
+public interface SpecificationMapper extends BaseMapper<Specification> {
 
     Specification findById(Long id);
-
+    // 根据商品类型查询商品规格
     List<Specification> findByProductTypeId(Long productTypeId);
 }
