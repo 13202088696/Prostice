@@ -26,7 +26,7 @@ public class ShoppingUserServiceImpl implements ShoppingUserService {
     @Override
     public void saveRegisterCheckCode(String phone, String checkCode) {
         ValueOperations valueOperations = redisTemplate.opsForValue();
-        valueOperations.set("registerCode:"+phone,checkCode,60, TimeUnit.SECONDS);
+        valueOperations.set("registerCode:"+phone,checkCode,300, TimeUnit.SECONDS);
     }
 
     @Override
@@ -62,17 +62,33 @@ public class ShoppingUserServiceImpl implements ShoppingUserService {
     }
 
     @Override
-    public void loginPassword(String username, String password) {
+    public String loginPassword(String username, String password) {
 
+        QueryWrapper<ShoppingUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username",username);
+        ShoppingUser shoppingUser = shoppingUserMapper.selectOne(queryWrapper);
+        if(shoppingUser == null) throw new BusException(CodeEnum.LOGIN_NAME_PASSWORD_ERROR);
+
+        boolean verify = Md5Util.verify(password, shoppingUser.getPassword());
+        if(!verify) throw new BusException(CodeEnum.LOGIN_NAME_PASSWORD_ERROR);
+        return username;
     }
 
     @Override
     public void saveLoginCheckCode(String phone, String checkCode) {
-
+        ValueOperations valueOperations = redisTemplate.opsForValue();
+        valueOperations.set("loginCode:"+phone,checkCode,300,TimeUnit.SECONDS);
     }
 
     @Override
-    public void loginCheckCode(String phone, String checkCode) {
+    public String loginCheckCode(String phone, String checkCode) {
+        ValueOperations valueOperations = redisTemplate.opsForValue();
+        Object object = valueOperations.get("loginCode:" + phone);
+        if(object != null && !object.equals(checkCode)) throw new BusException(CodeEnum.LOGIN_NAME_PASSWORD_ERROR);
+        QueryWrapper<ShoppingUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("phone",phone);
+        ShoppingUser shoppingUser = shoppingUserMapper.selectOne(queryWrapper);
+        return shoppingUser.getName();
 
     }
 

@@ -18,7 +18,7 @@ public class ShoppingUserController {
     @DubboReference
     private MessageService messageService;
 
-    @GetMapping("/sendLoginCheckCode")
+    @GetMapping("/sendMessage")
     public BaseResult sendMessage(String phone) throws ExecutionException, InterruptedException {
         String checkCode = RandomUtil.buildCheckCode(4);
         BaseResult result = messageService.sendMessage(phone, checkCode);
@@ -41,4 +41,28 @@ public class ShoppingUserController {
         shoppingUserService.register(shoppingUser);
         return BaseResult.ok();
     }
+
+    @PostMapping("/loginPassword")
+    public BaseResult loginPassword(@RequestBody ShoppingUser shoppingUser){
+        shoppingUserService.loginPassword(shoppingUser.getUsername(),shoppingUser.getPassword());
+        return BaseResult.ok();
+    }
+
+    @GetMapping("/sendLoginCheckCode")
+    public BaseResult sendLoginCheckCode(String phone) throws ExecutionException, InterruptedException {
+        String checkCode = RandomUtil.buildCheckCode(4);
+        BaseResult result = messageService.sendMessage(phone, checkCode);
+        if(200 == result.getCode()){
+            return BaseResult.ok();
+        }else {
+            return result;
+        }
+    }
+
+    @PostMapping("/loginCheckCode")
+    public BaseResult loginCheckCode(String phone,String checkCode){
+        shoppingUserService.loginCheckCode(phone,checkCode);
+        return BaseResult.ok();
+    }
+    
 }

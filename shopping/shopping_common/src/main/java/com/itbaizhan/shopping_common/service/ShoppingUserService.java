@@ -11,11 +11,11 @@ public interface ShoppingUserService {
     // 用户注册
     void register(ShoppingUser shoppingUser);
     // 用户名密码登录
-    void loginPassword(String username,String password);
+    String loginPassword(String username,String password);
     // 登录是向redis保存手机号和验证码
     void saveLoginCheckCode(String phone,String checkCode);
     //手机号登录验证码登录
-    void loginCheckCode(String phone,String checkCode);
+    String loginCheckCode(String phone,String checkCode);
     //获得用户名
     String getName(String token);
     //根据id获得用户
