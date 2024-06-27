@@ -27,6 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void update(Category category) {
         categoryMapper.updateById(category);
+        refreshRedisCategory();
     }
 
     @Override
@@ -34,11 +35,13 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryMapper.selectById(id);
         category.setStatus(status);
         categoryMapper.updateById(category);
+        refreshRedisCategory();
     }
 
     @Override
     public void delete(Long[] ids) {
         categoryMapper.deleteBatchIds(Arrays.asList(ids));
+        refreshRedisCategory();
     }
 
     @Override
@@ -64,10 +67,8 @@ public class CategoryServiceImpl implements CategoryService {
         List<Category> categoryList = listOperations.range("categories", 0, -1);
         //
         if(categoryList !=null && categoryList.size() > 0){
-            System.out.println("从redis查询");
             return categoryList;
         }else {
-            System.out.println("从mysql查询");
             QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("status",1);
             List<Category> categories = categoryMapper.selectList(queryWrapper);
@@ -76,5 +77,18 @@ public class CategoryServiceImpl implements CategoryService {
             return categories;
         }
 
+    }
+
+    /**
+     * 更新redis广告数据
+     */
+    public void refreshRedisCategory(){
+        //从数据库查询广告
+        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status",1);
+        List<Category> categories = categoryMapper.selectList(queryWrapper);
+        redisTemplate.delete("categories");
+        ListOperations<String,Category> listOperations = redisTemplate.opsForList();
+        listOperations.leftPushAll("categories",categories);
     }
 }

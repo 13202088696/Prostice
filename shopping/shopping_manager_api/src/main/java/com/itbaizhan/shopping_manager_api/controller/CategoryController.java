@@ -29,6 +29,7 @@ public class CategoryController {
     @PutMapping("/update")
     public BaseResult update(@RequestBody Category category){
         categoryService.update(category);
+
         return BaseResult.ok();
     }
 
