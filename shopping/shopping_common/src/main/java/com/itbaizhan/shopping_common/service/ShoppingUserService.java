@@ -18,6 +18,8 @@ public interface ShoppingUserService {
     String loginCheckCode(String phone,String checkCode);
     //获得用户名
     String getName(String token);
+    // 判断用户手机号是否存在，状态是否正常
+    void checkPhone(String phone);
     //根据id获得用户
     ShoppingUser getLoginUser(Long id);
 }

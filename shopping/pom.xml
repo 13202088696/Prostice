@@ -30,6 +30,10 @@
         <module>shopping_user_service</module>
         <!--shopping_user_customer_api-->
         <module>shopping_user_customer_api</module>
+        <!--cart 购物车-->
+        <module>shopping_cart_service</module>
+        <!--cart api管理-->
+        <module>shopping_cart_customer_api</module>
     </modules>
 
     <properties>

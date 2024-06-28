@@ -22,6 +22,7 @@ public enum CodeEnum {
     REGISTER_REPEAT_PHONE_ERROR(606,"手机信息存在"),
     REGISTER_REPEAT_NAME_ERROR(607,"用户名信息存在"),
     LOGIN_NAME_PASSWORD_ERROR(608,"登录错误"),
+    LOGIN_NOPHONE_ERROR(609,"手机状态异常"),
     ;
     private final Integer code;
     private final String message;

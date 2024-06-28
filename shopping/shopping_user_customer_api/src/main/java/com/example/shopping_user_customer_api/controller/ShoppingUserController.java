@@ -50,6 +50,7 @@ public class ShoppingUserController {
 
     @GetMapping("/sendLoginCheckCode")
     public BaseResult sendLoginCheckCode(String phone) throws ExecutionException, InterruptedException {
+        shoppingUserService.checkPhone(phone);
         String checkCode = RandomUtil.buildCheckCode(4);
         BaseResult result = messageService.sendMessage(phone, checkCode);
         if(200 == result.getCode()){
@@ -64,5 +65,7 @@ public class ShoppingUserController {
         shoppingUserService.loginCheckCode(phone,checkCode);
         return BaseResult.ok();
     }
+
+
     
 }
